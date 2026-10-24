@@ -11,7 +11,7 @@ public record VarDeclStmt(String name, IType type) implements IStmt {
         var symTable = state.getSymTable();
 
         if (symTable.isDefined(name)){
-            throw new MyException("Variable " + name + " is already declared");
+            throw new StatementException("Variable " + name + " is already declared");
         }
 
         symTable.put(name, type.defaultValue());

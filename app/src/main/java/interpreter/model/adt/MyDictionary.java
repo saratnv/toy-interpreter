@@ -37,4 +37,9 @@ public class MyDictionary<K, V> implements IDictionary<K, V> {
     public String toString() {
         return map.toString();
     }
+
+    @Override
+    public boolean isEmpty() {
+        return map.isEmpty();
+    }
 }

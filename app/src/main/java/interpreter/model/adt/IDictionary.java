@@ -11,4 +11,5 @@ public interface IDictionary<K,V> {
     void put(K key, V value);
     void update(K key, V value) throws ADTException;
 
+    boolean isEmpty();
 }

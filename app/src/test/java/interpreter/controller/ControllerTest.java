@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ControllerTest {
     private static PrgState run(IStmt program) throws MyException {
-        PrgState state = new PrgState(new MyStack<>(), new MyDictionary<>(), new MyList<>(), program);
+        PrgState state =PrgState.of( program);
         new Controller(new Repository(state), false).allStep();
         return state;
     }
@@ -29,7 +29,7 @@ public class ControllerTest {
     @Test
     void oneStepOnEmptyStackThrows() throws MyException{
         //init a state and clear the stack to test the error
-        PrgState state = new PrgState(new MyStack<>(), new MyDictionary<>(), new MyList<>(), Examples.EX1);
+        PrgState state = PrgState.of(Examples.EX1);
         state.getExeStack().pop();
 
         Controller controller = new Controller(new Repository(state), false);

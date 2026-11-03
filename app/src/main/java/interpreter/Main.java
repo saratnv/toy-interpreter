@@ -55,7 +55,7 @@ public class Main {
     private static void runProgram(IStmt program){
         try{
             //each run gets a fresh memory state
-            PrgState state = new PrgState(new MyStack<>(), new MyDictionary<>(), new MyList<>(), program);
+            PrgState state =PrgState.of( program);
             Repository repo = new Repository(state);
             Controller controller = new Controller(repo, true);
 

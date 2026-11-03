@@ -42,4 +42,17 @@ public class MyDictionary<K, V> implements IDictionary<K, V> {
     public boolean isEmpty() {
         return map.isEmpty();
     }
+
+    @Override
+    public void remove(K key) throws ADTException {
+        if (!map.containsKey(key)) {
+            throw new ADTException("Key is not defined.");
+        }
+        map.remove(key);
+    }
+
+    @Override
+    public java.util.Map<K,V> toMap() {
+        return java.util.Map.copyOf(map);
+    }
 }

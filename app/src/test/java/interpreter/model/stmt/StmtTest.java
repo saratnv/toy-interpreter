@@ -29,10 +29,12 @@ class StmtTest {
 
     @BeforeEach
     void setUp() throws MyException {
-        exeStack = new MyStack<>();
-        symTable = new MyDictionary<>();
-        out = new MyList<>();
-        state = new PrgState(exeStack, symTable,out, new NopStmt());
+        state = PrgState.of(new NopStmt());
+
+        exeStack = state.getExeStack();
+        symTable = state.getSymTable();
+        out = state.getOut();
+
         exeStack.pop();
     }
 

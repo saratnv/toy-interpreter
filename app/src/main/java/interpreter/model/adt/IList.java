@@ -5,4 +5,5 @@ public interface IList<T> {
     void add(T item);
     T get(int index) throws ADTException;
     int size();
+    java.util.List<T> toList();
 }

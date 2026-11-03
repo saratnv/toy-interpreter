@@ -31,4 +31,11 @@ public class MyStack<T> implements IStack<T> {
     public String toString(){
         return stack.toString();
     }
+
+    @Override
+    public java.util.List<T> toList(){
+        java.util.List<T> elements = new java.util.ArrayList<>(stack);
+        java.util.Collections.reverse(elements);
+        return elements;
+    }
 }

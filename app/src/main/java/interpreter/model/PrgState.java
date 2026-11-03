@@ -12,12 +12,13 @@ public class PrgState {
     private final IStmt originalProgram;
 
     public PrgState(IStack<IStmt> exeStack, IDictionary<String, IValue> symTable, IList<IValue> out, IStmt program){
-        this.exeStack = exeStack;
-        this.symTable = symTable;
-        this.out = out;
+        this.exeStack = exeStack;//instruction pointer queue, holds statements
+        this.symTable = symTable;//variable memory, var names+their values
+        this.out = out; //output stream
         this.originalProgram = program;
         exeStack.push(program);
     }
+
 
     public IStack<IStmt> getExeStack(){ return exeStack; }
     public void setExeStack(IStack<IStmt> exeStack){this.exeStack = exeStack; }

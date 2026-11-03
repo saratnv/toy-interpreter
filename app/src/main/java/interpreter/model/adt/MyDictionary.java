@@ -27,8 +27,8 @@ public class MyDictionary<K, V> implements IDictionary<K, V> {
 
     @Override
     public void update(K key, V value) throws ADTException {
-        if (!isDefined(key)) {
-            throw new ADTException("Cannot update; key '" + key + "' is not defined.");
+        if (!map.containsKey(key)) {
+            throw new ADTException("Key is not defined.");
         }
         map.put(key, value);
     }

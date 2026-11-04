@@ -56,7 +56,7 @@ public class Main {
         try{
             //each run gets a fresh memory state
             PrgState state =PrgState.of( program);
-            Repository repo = new Repository(state);
+            Repository repo = new Repository(state, "log.txt");
             Controller controller = new Controller(repo, true);
 
             System.out.println("\n - EXECUTION TRACE -");

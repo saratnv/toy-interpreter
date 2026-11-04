@@ -1,73 +1,32 @@
 package interpreter;
 import interpreter.controller.Controller;
-import interpreter.exceptions.MyException;
 import interpreter.model.PrgState;
-import interpreter.model.adt.MyDictionary;
-import interpreter.model.adt.MyList;
-import interpreter.model.adt.MyStack;
 import interpreter.model.stmt.IStmt;
 import interpreter.repository.Repository;
 import interpreter.view.Examples;
-
-import java.util.Scanner;
+import interpreter.view.ExitCommand;
+import interpreter.view.RunExampleCommand;
+import interpreter.view.TextMenu;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-
-        while (true){
-            System.out.println("\nTOY INTERPRETER MENU");
-            System.out.println("1. Run Example 1: " + Examples.EX1);
-            System.out.println("2. Run Example 2: " + Examples.EX2);
-            System.out.println("3. Run Example 3: " + Examples.EX3);
-            System.out.println("0. Exit");
-            System.out.print("Select an option: ");
-
-            if (!scanner.hasNextInt()){
-                System.out.println("Invalid input. Please enter a number.");
-                scanner.next();
-                continue;
-            }
-
-            int choice = scanner.nextInt();
-            if(choice == 0){
-                System.out.println("Exiting...");
-                break;
-            }
-
-            IStmt selectedProgram = null;
-            switch(choice){
-                case 1 -> selectedProgram = Examples.EX1;
-                case 2 -> selectedProgram = Examples.EX2;
-                case 3 -> selectedProgram = Examples.EX3;
-                default -> System.out.println("Invalid choice. Please try again.");
-            }
-
-            if(selectedProgram != null){
-                runProgram(selectedProgram);
-            }
-
-        }
-
-        scanner.close();
+    private static Controller makeController(IStmt program, String logFile){
+        PrgState state = PrgState.of(program);
+        Repository repo = new Repository(state, logFile);
+        return new Controller(repo, true);
     }
 
-    private static void runProgram(IStmt program){
-        try{
-            //each run gets a fresh memory state
-            PrgState state =PrgState.of( program);
-            Repository repo = new Repository(state, "log.txt");
-            Controller controller = new Controller(repo, true);
+    public static void main(String[] args) {
+        TextMenu menu = new TextMenu();
 
-            System.out.println("\n - EXECUTION TRACE -");
-            controller.allStep();
-            System.out.println(" - EXECUTION FINISHED - ");
+        menu.addCommand(new ExitCommand("0", "exit"));
 
-        }catch (MyException e){
-            System.out.println("Interpreter error: " + e.getMessage());
-        } catch (Exception e){
-            System.out.println("Unexpected error: " + e.getMessage());
-        }
+        menu.addCommand(new RunExampleCommand("1", "Run Example 1", makeController(Examples.EX1, "log1.txt")));
+        menu.addCommand(new RunExampleCommand("2", "Run Example 2", makeController(Examples.EX2, "log2.txt")));
+        menu.addCommand(new RunExampleCommand("3", "Run Example 3", makeController(Examples.EX3, "log3.txt")));
 
+        menu.addCommand(new RunExampleCommand("4", "Run file operations example", makeController(Examples.ex4(), "log4.txt")));
+        menu.addCommand(new RunExampleCommand("5", "Run relational expression example", makeController(Examples.ex5(), "log5.txt")));
+
+        menu.show();
     }
 }

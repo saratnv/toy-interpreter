@@ -50,4 +50,55 @@ public class Examples {
             )
     );
 
+    public static IStmt ex4() {
+        // string varf; varf="test.in"; openRFile(varf); int varc;
+        // readFile(varf,varc); print(varc); readFile(varf,varc); print(varc); closeRFile(varf)
+        return new CompStmt(
+                new VarDeclStmt("varf", new StringType()),
+                new CompStmt(
+                        new AssignStmt("varf", new ValueExp(new StringValue("C:\\\\UNI2\\\\map\\\\toy-interpreter\\\\test.in"))),
+                        new CompStmt(
+                                new OpenRFileStmt(new VarExp("varf")),
+                                new CompStmt(
+                                        new VarDeclStmt("varc", new IntType()),
+                                        new CompStmt(
+                                                new ReadFileStmt(new VarExp("varf"), "varc"),
+                                                new CompStmt(
+                                                        new PrintStmt(new VarExp("varc")),
+                                                        new CompStmt(
+                                                                new ReadFileStmt(new VarExp("varf"), "varc"),
+                                                                new CompStmt(
+                                                                        new PrintStmt(new VarExp("varc")),
+                                                                        new CloseRFileStmt(new VarExp("varf"))
+                                                                )
+                                                        )
+                                                )
+                                        )
+                                )
+                        )
+                )
+        );
+    }
+
+    public static IStmt ex5() {
+        // int a; int b; a=5; b=7; if (a<b) then print(a) else print(b)
+        return new CompStmt(
+                new VarDeclStmt("a", new IntType()),
+                new CompStmt(
+                        new VarDeclStmt("b", new IntType()),
+                        new CompStmt(
+                                new AssignStmt("a", new ValueExp(new IntValue(5))),
+                                new CompStmt(
+                                        new AssignStmt("b", new ValueExp(new IntValue(7))),
+                                        new IfStmt(
+                                                new RelationalExp(RelOp.LT, new VarExp("a"), new VarExp("b")),
+                                                new PrintStmt(new VarExp("a")),
+                                                new PrintStmt(new VarExp("b"))
+                                        )
+                                )
+                        )
+                )
+        );
+    }
+
 }

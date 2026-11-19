@@ -11,9 +11,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import interpreter.model.adt.IHeap;
+import interpreter.model.adt.MyHeap;
 
 class RelationalExpTest {
     private MyDictionary<String, IValue> symTable;
+    private final IHeap heap = new MyHeap();
 
     @BeforeEach
     void setUp() {
@@ -26,12 +29,12 @@ class RelationalExpTest {
         IExp right = new ValueExp(new IntValue(10));
         IExp equalLeft = new ValueExp(new IntValue(10));
 
-        assertEquals(new BoolValue(true), new RelationalExp(RelOp.LT, left, right).eval(symTable));
-        assertEquals(new BoolValue(true), new RelationalExp(RelOp.LE, left, right).eval(symTable));
-        assertEquals(new BoolValue(true), new RelationalExp(RelOp.EQ, right, equalLeft).eval(symTable));
-        assertEquals(new BoolValue(true), new RelationalExp(RelOp.NE, left, right).eval(symTable));
-        assertEquals(new BoolValue(true), new RelationalExp(RelOp.GT, right, left).eval(symTable));
-        assertEquals(new BoolValue(true), new RelationalExp(RelOp.GE, right, equalLeft).eval(symTable));
+        assertEquals(new BoolValue(true), new RelationalExp(RelOp.LT, left, right).eval(symTable, heap));
+        assertEquals(new BoolValue(true), new RelationalExp(RelOp.LE, left, right).eval(symTable, heap));
+        assertEquals(new BoolValue(true), new RelationalExp(RelOp.EQ, right, equalLeft).eval(symTable, heap));
+        assertEquals(new BoolValue(true), new RelationalExp(RelOp.NE, left, right).eval(symTable, heap));
+        assertEquals(new BoolValue(true), new RelationalExp(RelOp.GT, right, left).eval(symTable, heap));
+        assertEquals(new BoolValue(true), new RelationalExp(RelOp.GE, right, equalLeft).eval(symTable, heap));
     }
 
     @Test
@@ -40,12 +43,12 @@ class RelationalExpTest {
         IExp right = new ValueExp(new IntValue(10));
         IExp equalLeft = new ValueExp(new IntValue(10));
 
-        assertEquals(new BoolValue(false), new RelationalExp(RelOp.GT, left, right).eval(symTable));
-        assertEquals(new BoolValue(false), new RelationalExp(RelOp.GE, left, right).eval(symTable));
-        assertEquals(new BoolValue(false), new RelationalExp(RelOp.EQ, left, right).eval(symTable));
-        assertEquals(new BoolValue(false), new RelationalExp(RelOp.NE, right, equalLeft).eval(symTable));
-        assertEquals(new BoolValue(false), new RelationalExp(RelOp.LT, right, left).eval(symTable));
-        assertEquals(new BoolValue(false), new RelationalExp(RelOp.LE, right, left).eval(symTable));
+        assertEquals(new BoolValue(false), new RelationalExp(RelOp.GT, left, right).eval(symTable, heap));
+        assertEquals(new BoolValue(false), new RelationalExp(RelOp.GE, left, right).eval(symTable, heap));
+        assertEquals(new BoolValue(false), new RelationalExp(RelOp.EQ, left, right).eval(symTable, heap));
+        assertEquals(new BoolValue(false), new RelationalExp(RelOp.NE, right, equalLeft).eval(symTable, heap));
+        assertEquals(new BoolValue(false), new RelationalExp(RelOp.LT, right, left).eval(symTable, heap));
+        assertEquals(new BoolValue(false), new RelationalExp(RelOp.LE, right, left).eval(symTable, heap));
     }
 
     @Test
@@ -54,11 +57,11 @@ class RelationalExpTest {
         IExp invalidString = new ValueExp(new StringValue("test"));
 
         ExpressionException ex1 = assertThrows(ExpressionException.class,
-                () -> new RelationalExp(RelOp.LT, invalidString, validInt).eval(symTable));
+                () -> new RelationalExp(RelOp.LT, invalidString, validInt).eval(symTable, heap));
         assertTrue(ex1.getMessage().contains("first operand is not an integer"));
 
         ExpressionException ex2 = assertThrows(ExpressionException.class,
-                () ->new RelationalExp(RelOp.LE, validInt, invalidString).eval(symTable));
+                () ->new RelationalExp(RelOp.LE, validInt, invalidString).eval(symTable, heap));
         assertTrue(ex2.getMessage().contains("second operand is not an integer"));
     }
 }

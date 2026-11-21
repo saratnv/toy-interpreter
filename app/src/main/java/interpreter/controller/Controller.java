@@ -35,16 +35,23 @@ public class Controller {
     public void allStep() throws MyException {
         PrgState prg = repository.getCrtPrg();
         repository.logPrgStateExec();
-        display(prg);
-        while(!prg.getExeStack().isEmpty()){
+        if (displayFlag) {
+            System.out.println(prg);
+        }
+
+        while (!prg.getExeStack().isEmpty()) {
             oneStep(prg);
+            repository.logPrgStateExec(); // log before garbage collection
             prg.getHeap().setContent(
-                    safeGarbageCollector(
-                            getReachableAddress(prg.getSymTable().toMap().values(), prg.getHeap().getContent()),
+                    GarbageCollector.safeGarbageCollector(
+                            GarbageCollector.getAddrFromSymTable(prg.getSymTable().toMap().values()),
                             prg.getHeap().getContent()
                     )
             );
-            repository.logPrgStateExec();
+            repository.logPrgStateExec(); // log after garbage collection
+            if (displayFlag) {
+                System.out.println(prg);
+            }
         }
     }
 
@@ -54,34 +61,5 @@ public class Controller {
         }
     }
 
-    private Set<Integer> getReachableAddress(Collection<IValue> symTableValues, Map<Integer, IValue> heap){
-        Set<Integer> reachable = new HashSet<>();
-        Deque<Integer> worklist = new ArrayDeque<>();
 
-        for (IValue val : symTableValues) {
-            if (val instanceof RefValue rv && rv.address() != 0) {
-                if (reachable.add(rv.address())) {
-                    worklist.push(rv.address());
-                }
-            }
-        }
-
-        while (!worklist.isEmpty()){
-            int addr = worklist.pop();
-            IValue heapVal = heap.get(addr);
-            if (heapVal instanceof RefValue rv && rv.address() != 0) {
-                if (reachable.add(rv.address())) {
-                    worklist.push(rv.address());
-                }
-            }
-        }
-
-        return reachable;
-    }
-
-    private Map<Integer, IValue> safeGarbageCollector(Set<Integer> reachableAddresses, Map<Integer, IValue> heap){
-        return heap.entrySet().stream()
-                .filter(e -> reachableAddresses.contains(e.getKey()))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-    }
 }

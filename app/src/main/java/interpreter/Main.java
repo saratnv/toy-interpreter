@@ -27,6 +27,12 @@ public class Main {
         menu.addCommand(new RunExampleCommand("4", "Run file operations example", makeController(Examples.ex4(), "log4.txt")));
         menu.addCommand(new RunExampleCommand("5", "Run relational expression example", makeController(Examples.ex5(), "log5.txt")));
 
+        menu.addCommand(new RunExampleCommand("6", "Run heap allocation example", makeController(Examples.ex6(), "log6.txt")));
+        menu.addCommand(new RunExampleCommand("7", "Run heap reading example", makeController(Examples.ex7(), "log7.txt")));
+        menu.addCommand(new RunExampleCommand("8", "Run heap writing example", makeController(Examples.ex8(), "log8.txt")));
+        menu.addCommand(new RunExampleCommand("9", "Run safe garbage collector example", makeController(Examples.ex9(), "log9.txt")));
+        menu.addCommand(new RunExampleCommand("10", "Run while statement example", makeController(Examples.ex10(), "log10.txt")));
+
         menu.show();
     }
 }
